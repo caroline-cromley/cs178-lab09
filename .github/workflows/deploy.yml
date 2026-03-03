@@ -18,12 +18,12 @@ jobs:
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ec2-18-215-161-164.compute-1.amazonaws.com >> ~/.ssh/known_hosts
 
       # Step 2: SSH into EC2 and pull the latest code from main
       - name: Deploy via SSH
         run: |
-          ssh -i ~/.ssh/deploy_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
+          ssh -i ~/.ssh/deploy_key ec2-user@ec2-18-215-161-164.compute-1.amazonaws.com \
             "cd ~/cs178-lab09 && git pull origin main"
